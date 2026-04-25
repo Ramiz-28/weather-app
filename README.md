@@ -5,7 +5,7 @@ A modern weather application that shows real-time weather data, 5-day forecast, 
 
 ## 🚀 Live Demo
 
-https://rkf-weather.netlify.app
+https://weatherdashboarde.netlify.app/
 
 ## ✨ Features
 
