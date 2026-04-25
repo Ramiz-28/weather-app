@@ -1,1 +1,13 @@
 
+# Node modules (if you ever use them)
+node_modules/
+
+# Environment variables (VERY IMPORTANT)
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
