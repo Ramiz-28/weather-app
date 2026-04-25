@@ -11,3 +11,13 @@ Thumbs.db
 
 # Logs
 *.log
+## 📸 Screenshots
+
+### 🏠 Home Page
+![Home](screenshots/home.png)
+
+### 📅 Forecast
+![Forecast](screenshots/forecast.png)
+
+### 🔍 Saved Cities
+![Search](screenshots/search.png)
