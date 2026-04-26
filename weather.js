@@ -10,43 +10,44 @@ btn.addEventListener("click", async function () {
     return;
   }
 
-let res = await fetch(`/.netlify/functions/weather?city=${city}`);
-let data = await res.json();
+  let res = await fetch(`/.netlify/functions/weather?city=${city}`);
+  let data = await res.json();
 
-  let forecastRes = await fetch(
-    `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=3ead7b7033d5c5067489f30fff609d85&units=metric`,
-  );
+  let weather = data.weather;
+  let forecast = data.forecast;
 
-  let forecastData = await forecastRes.json();
-  renderForecast(forecastData);
-  console.log("FORECAST RESPONSE:", forecastData);
-
-  // ❗ Check first
-  if (data.cod !== 200) {
-    alert(data.message);
+  // ❗ check error
+  if (weather.cod !== 200) {
+    alert(weather.message);
     return;
   }
 
   renderCities();
 
-  // Show weather
-  let condition = data.weather[0].main;
-  document.getElementById("city").innerText = data.name;
-  document.getElementById("temp").innerText = data.main.temp + "°C";
+  let condition = weather.weather[0].main;
 
-  document.getElementById("condition").innerText = "Condition: " + condition;
+  document.getElementById("city").innerText = weather.name;
+  document.getElementById("temp").innerText = weather.main.temp + "°C";
 
-  document.getElementById("icon").innerHTML = getWeatherIcon(condition);
+  document.getElementById("condition").innerText =
+    "Condition: " + condition;
 
-  setWeatherBackground(condition); // 👈 ADD THIS
+  document.getElementById("icon").innerHTML =
+    getWeatherIcon(condition);
 
-  document.getElementById("humidity").innerText = data.main.humidity + "%";
+  document.getElementById("humidity").innerText =
+    weather.main.humidity + "%";
 
   document.getElementById("visibility").innerText =
-    (data.visibility / 1000).toFixed(1) + " km";
+    (weather.visibility / 1000).toFixed(1) + " km";
 
   document.getElementById("wind").innerText =
-    (data.wind.speed * 3.6).toFixed(1) + " km/h";
+    (weather.wind.speed * 3.6).toFixed(1) + " km/h";
+
+  setWeatherBackground(condition);
+
+  // ✅ forecast from backend
+  renderForecast(forecast);
 });
 
 let saveBtn = document.getElementById("saveCity");
@@ -93,39 +94,41 @@ function renderCities() {
 async function loadCity(city) {
   document.getElementById("cityInput").value = city;
 
-  // Load Cities Data
-let res = await fetch(`/.netlify/functions/weather?city=${city}`);
-let data = await res.json();
+  let res = await fetch(`/.netlify/functions/weather?city=${city}`);
+  let data = await res.json();
 
-    // Loads Forecast Data
-   let forecastRes = await fetch(
-    `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=3ead7b7033d5c5067489f30fff609d85&units=metric`,
-  );
+  let weather = data.weather;
+  let forecast = data.forecast;
 
-  let forecastData = await forecastRes.json();
-  renderForecast(forecastData);
-  console.log("FORECAST RESPONSE:", forecastData);
-
-  if (data.cod !== 200) {
-    alert(data.message);
+  if (weather.cod !== 200) {
+    alert(weather.message);
     return;
   }
 
-  document.getElementById("city").innerText = data.name;
+  let condition = weather.weather[0].main;
+
+  document.getElementById("city").innerText = weather.name;
   document.getElementById("temp").innerText =
-    "Temperature: " + data.main.temp + "°C";
-  let condition = data.weather[0].main;
+    weather.main.temp + "°C";
 
-  document.getElementById("condition").innerText = "Condition: " + condition;
+  document.getElementById("condition").innerText =
+    "Condition: " + condition;
 
-  document.getElementById("icon").innerHTML = getWeatherIcon(condition);
-  setWeatherBackground(condition); // 👈 ADD THIS
+  document.getElementById("icon").innerHTML =
+    getWeatherIcon(condition);
+
   document.getElementById("humidity").innerText =
-    "Humidity: " + data.main.humidity + "%";
+    weather.main.humidity + "%";
+
   document.getElementById("visibility").innerText =
-    "Visibility: " + (data.visibility / 1000).toFixed(1) + "km";
+    (weather.visibility / 1000).toFixed(1) + " km";
+
   document.getElementById("wind").innerText =
-    "Wind: " + (data.wind.speed * 3.6).toFixed(1) + "km/h";
+    (weather.wind.speed * 3.6).toFixed(1) + " km/h";
+
+  setWeatherBackground(condition);
+
+  renderForecast(forecast);
 }
 
 // Delete Cities
